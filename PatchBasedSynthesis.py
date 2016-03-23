@@ -134,7 +134,7 @@ def GetCostHorizntl(imgPx, samplePx):
 
 def FindMinCostPathVertical(Cost):
     Boundary = np.zeros((PatchSize),np.int)
-    ParentMatrix = np.zeros((PatchSize, OverlapWidth))
+    ParentMatrix = np.zeros((PatchSize, OverlapWidth),np.int)
     for i in range(1, PatchSize):
         for j in range(OverlapWidth):
             if j == 0:
@@ -155,7 +155,7 @@ def FindMinCostPathVertical(Cost):
 
 def FindMinCostPathHorizntl(Cost):
     Boundary = np.zeros(( PatchSize),np.int)
-    ParentMatrix = np.zeros((OverlapWidth, PatchSize))
+    ParentMatrix = np.zeros((OverlapWidth, PatchSize),np.int)
     for j in range(1, PatchSize):
         for i in range(OverlapWidth):
             if i == 0:
@@ -182,11 +182,13 @@ def QuiltVertical(Boundary, imgPx, samplePx):
     for i in range(PatchSize):
         for j in range(Boundary[i], OverlapWidth):
             img[imgPx[0] + i, imgPx[1] - j] = img_sample[ samplePx[0] + i, samplePx[1] - j ]
+        img[imgPx[0] + i, imgPx[1] - Boundary[i]] = (0,0,255)
 
 def QuiltHorizntl(Boundary, imgPx, samplePx):
     for j in range(PatchSize):
         for i in range(Boundary[j], OverlapWidth):
             img[imgPx[0] - i, imgPx[1] + j] = img_sample[samplePx[0] - i, samplePx[1] + j]
+        img[imgPx[0] - Boundary[j], imgPx[1] + j] = (0,0,255)
 
 def QuiltPatches( imgPx, samplePx ):
     #check for top layer
