@@ -55,35 +55,34 @@ def OverlapErrorHorizntl( leftPx, rightPx ):
     return OverlapErr
 
 def GetBestPatches( px ):#Will get called in GrowImage
-    PixelList = []
+    PixelList = (0,0)
+    minErrVertical = minErrHorizntl = minErr = 1000*ThresholdOverlapError
     #check for top layer
     if px[0] == 0:
         for i in range(sample_height - PatchSize):
             for j in range(OverlapWidth, sample_width - PatchSize ):
                 error = OverlapErrorVertical( (px[0], px[1] - OverlapWidth), (i, j - OverlapWidth)  )
-                if error  < ThresholdOverlapError:
-                    PixelList.append((i,j))
-                elif error < ThresholdOverlapError/2:
-                    return [(i,j)]
+                if error  < minErr:
+                    minErr = error
+                    PixelList = (i,j)
     #check for leftmost layer
     elif px[1] == 0:
         for i in range(OverlapWidth, sample_height - PatchSize ):
             for j in range(sample_width - PatchSize):
                 error = OverlapErrorHorizntl( (px[0] - OverlapWidth, px[1]), (i - OverlapWidth, j)  )
-                if error  < ThresholdOverlapError:
-                    PixelList.append((i,j))
-                elif error < ThresholdOverlapError/2:
-                    return [(i,j)]
+                if error  < minErr:
+                    minErr = error
+                    PixelList = (i,j)
     #for pixel placed inside 
     else:
         for i in range(OverlapWidth, sample_height - PatchSize):
             for j in range(OverlapWidth, sample_width - PatchSize):
                 error_Vertical   = OverlapErrorVertical( (px[0], px[1] - OverlapWidth), (i,j - OverlapWidth)  )
                 error_Horizntl   = OverlapErrorHorizntl( (px[0] - OverlapWidth, px[1]), (i - OverlapWidth,j) )
-                if error_Vertical  < ThresholdOverlapError and error_Horizntl < ThresholdOverlapError:
-                    PixelList.append((i,j))
-                elif error_Vertical < ThresholdOverlapError/2 and error_Horizntl < ThresholdOverlapError/2:
-                    return [(i,j)]
+                if error_Vertical  < minErrVertical and error_Horizntl < minErrHorizntl:
+                    minErrVertical = error_Vertical
+                    minErrHorizntl = error_Horizntl
+                    PixelList = (i,j)
     return PixelList
 
 #-----------------------------------------------------------------------------------------------#
@@ -238,7 +237,7 @@ while GrowPatchLocation[0] + PatchSize < img_height:
         if len(List) > 0:
             progress = 1
             #Make A random selection from best fit pxls
-            sampleMatch = List[ randint(0, len(List) - 1) ]
+            sampleMatch = List
             FillImage( GrowPatchLocation, sampleMatch )
             #Quilt this with in curr location
             QuiltPatches( GrowPatchLocation, sampleMatch )
