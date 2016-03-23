@@ -8,14 +8,14 @@ from random import randint
 #Image Loading and initializations
 InputName = str(sys.argv[1])
 img_sample = cv2.imread(InputName)
-img_height = 150
-img_width = 150
+img_height = 250
+img_width  = 200
 sample_width = img_sample.shape[1]
 sample_height = img_sample.shape[0]
 img = np.zeros((img_height,img_width,3), np.uint8)
-PatchSize = 30
-OverlapWidth = 4
-
+PatchSize = 50
+OverlapWidth = 8
+InitialThresConstant = 45.0
 
 #Picking random patch to begin
 randomPatchHeight = randint(0, sample_height - PatchSize)
@@ -228,7 +228,7 @@ sys.stdout.write("Progress : [%-20s] %d%% | PixelsCompleted: %d | ThresholdConst
 sys.stdout.flush()
 while GrowPatchLocation[0] + PatchSize < img_height:
     pixelsCompleted += 1
-    ThresholdConstant = 45.0
+    ThresholdConstant = InitialThresConstant
     #set progress to zer0
     progress = 0 
     while progress == 0:
