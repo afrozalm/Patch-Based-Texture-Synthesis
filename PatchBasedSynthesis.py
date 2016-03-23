@@ -187,7 +187,7 @@ def QuiltVertical(Boundary, imgPx, samplePx):
 def QuiltHorizntl(Boundary, imgPx, samplePx):
     for j in range(PatchSize):
         for i in range(Boundary[j], OverlapWidth):
-            img[imgPx[0] - i, imgPx[0] + j] = img_sample[samplePx[0] - i, samplePx[1] + j]
+            img[imgPx[0] - i, imgPx[1] + j] = img_sample[samplePx[0] - i, samplePx[1] + j]
 
 def QuiltPatches( imgPx, samplePx ):
     #check for top layer
