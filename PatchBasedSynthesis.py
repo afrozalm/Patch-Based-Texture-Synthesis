@@ -13,9 +13,9 @@ img_width  = 200
 sample_width = img_sample.shape[1]
 sample_height = img_sample.shape[0]
 img = np.zeros((img_height,img_width,3), np.uint8)
-PatchSize = 50
-OverlapWidth = 8
-InitialThresConstant = 45.0
+PatchSize = int(sys.argv[2])
+OverlapWidth = int(sys.argv[3])
+InitialThresConstant = float(sys.argv[4])
 
 #Picking random patch to begin
 randomPatchHeight = randint(0, sample_height - PatchSize)
